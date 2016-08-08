@@ -34,13 +34,17 @@ for x in text:
 
 pprint(dict)  #Prints sorted by alphabet
 
+
 print('_'*10)
 
 for w in sorted(dict, key=dict.get, reverse=True):  #Prints sort by numbers
     print (w,dict[w])
 
-print('_'*10)
+print('_'*10 )
 
 for w in sorted(dict, key=dict.get):  #Prints sort by numbers reversed
     print (w,dict[w])
+
+#for keys in d.keys():
+    #print keys,"=", d[keys]  #here also can do sorted list of d.key
 
