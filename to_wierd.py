@@ -8,17 +8,15 @@ def to_wierd  ( string ):
     new_list = []
     for word in list_of_words:
         letter_list = list(word)
-        for letter in letter_list:
-            if letter_list.index(letter) % 2 == 0:
-                letter_list.insert(letter_list.index(letter), letter.upper())
-                letter_list.pop(letter_list.index(letter))
-            else:
-                letter_list.insert(letter_list.index(letter), letter.lower())
-                letter_list.pop(letter_list.index(letter))
+        for index in range(len(letter_list)):
+            position = letter_list[index]
+            if index % 2 == 0:
+                letter_list[index] = position.upper()
+            #else:
+                #letter_list[index] = list_of_words[index].lower()
 
-            joined = (''.join(letter_list))
+        joined = (''.join(letter_list))
         new_list.append(joined)
-    #print ' '.join(nu_li)
     string = ' '.join(new_list)
     print (string)
 
