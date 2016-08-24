@@ -1,58 +1,72 @@
-from itertools import count
 import random
-class Cars(object):
-    car_count = 0
 
-    def __init__(self, engine = 'Gas', tank = 60, car_cost = 10000, max_run = 200000, tachograph = 0,
-                 money_for_fuel = 0, fuel_comsum = 8, fuel_price = 2.4 ):
-        Cars.car_count += 1
-        tank_75 = 75
-        self.tank = tank
-        self.money_for_fuel = money_for_fuel
-        self.fuel_consum = fuel_comsum
-        self.engine = engine
-        self.car_cost = car_cost
-        self.max_run = max_run
-        self.fuel_price = fuel_price
-        self.tachograph = tachograph
-        if Cars.car_count % 3 == 0:
-            self.engine = 'Diesel'
-        if Cars.car_count % 5 == 0:
-            self.tank = tank_75
-        if self.engine == 'Diesel':
-            self.fuel_price = 1.8
+class Engine(object):
+    engine_count = 0
+    def __init__(self):
+        Engine.engine_count += 1
+        self.engine_type = 'Gas'
+        self.consumption = 8.0                  # liters per kilometer
+        self.max_run = 200000
+        self.fuel_price = 2.4
+        self.cost_lost = 100
+        if Engine.engine_count % 3 == 0:
+            self.engine_type = 'Diesel'
+            self.consumption = 6.0               # liters per kilometer
             self.max_run = 150000
-            self.fuel_consum = 6
+            self.fuel_price = 1.8
+            self.cost_lost = 120
+
+class Cars(Engine):
+    car_count = 0
+    def __init__(self, car_cost = 10000, tachograph = 0, money_for_fuel = 0):
+        Cars.car_count += 1
+        super(self.__class__, self).__init__()
+        self.tank = 60
+        self.money_for_fuel = money_for_fuel
+        self.car_cost = car_cost
+        self.tachograph = tachograph
+        #self.path = random.randint(29000, 186000)
+        if Cars.car_count % 5 == 0:
+            self.tank = 75
+        self.define_trip_distance()
+
+    # @staticmethod
+    # def get_distance():
+    #     Cars.distance_traveled = xrange(29000, 186000,1)
+    #          return distance_traveled
+    def define_trip_distance(self):
+        self.trip_distance = random.randint(29000, 186000)
 
     def ride(self):
-        fuel_left = self.tank
-        self.path = random.randint(29000, 186000)
-        print (self.path)
-        if self.path > self.max_run:
-            print ('Car to utilization')
+        while self.trip_distance != 0:
+            self.trip_distance -=1
+            refill = self.tank
+            self.tachograph += 1
+            self.tank -= self.consumption
+            self.money_for_fuel += (self.consumption * self.fuel_price) / 100
+            print self.tank
+            if int(self.tank) <= 0:
+                print ('Refill tank')
+                self.tank = refill
+            if int(self.tachograph) % 1000 == 0:
+                self.car_cost -= self.cost_lost
+                self.consumption = self.consumption * 1.1
+                print ('Comsumption increase, car cost decrease.')
+            if self.tachograph == self.max_run:
+                print ('Car broke, stop moving')
 
-        for km_100 in range(0, self.path, 100):
-            print km_100
-            self.tachograph += km_100
-            self.tank -= self.fuel_consum
-            self.money_for_fuel += self.fuel_price
-            #print (self.tachograph)
-            if self.tank <= 4:
-                self.tank = fuel_left
-                #print ('Tank is empty, refill')
+
+
+
+
+
+
 
 
 
 car = Cars()
-car2 = Cars ()
-car3 = Cars ()
+car2 = Cars()
+car3 = Cars()
 car4 = Cars()
-car5 = Cars()
-car6 = Cars()
-car7 = Cars()
-car8 = Cars()
-car9 = Cars()
-car10 = Cars()
-print Cars.ride(car4)
-print (car.ride(), car2.engine, car3.engine, car4.engine, car5.engine, car6.engine, car7.engine, car8.engine)
-print (car.tank, car2.tank, car3.tank, car4.tank, car5.tank, car6.tank, car7.tank, car8.tank, car9.tank,car10.max_run)
+car3.ride()
+print (car3.__dict__)
