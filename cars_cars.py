@@ -42,8 +42,8 @@ class Cars(Engine):
         return self.trip_distance
 
     def __str__(self):
-        return ('Distance passed {}, car cost {}, money for fuel {}, km in reserve {}'.format(
-        self.tachograph, self.car_cost, int(self.money_for_fuel), self.max_run - self.tachograph))
+        return ('Distance passed {}, car cost {}, money for fuel {}, km in reserve {}, engine type is {}'.format(
+        self.tachograph, self.car_cost, int(self.money_for_fuel), self.max_run - self.tachograph,self.engine_type))
 
 
     # def tank_refill(self):
@@ -97,12 +97,14 @@ class Cars(Engine):
 
 
 
-
-car = Cars()
-car2 = Cars()
-car3 = Cars()
-car4 = Cars()
-car5 = Cars()
-car5.ride()
-print (car5.__dict__)
-print car5
+car_pool = []
+gas_pool = []
+diesel_pool = []
+for x in range(0,20):
+    x = Cars()
+    x.ride()
+    car_pool.append(x)
+for car in car_pool:
+    if car.engine_type == 'Gas':
+        gas_pool.append(car)
+        print sorted(gas_pool)
