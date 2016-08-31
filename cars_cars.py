@@ -1,4 +1,5 @@
 import random
+import operator
 
 class Engine(object):
     engine_count = 0
@@ -29,6 +30,7 @@ class Cars(Engine):
         self.tachograph = 0
         self.every_nth_car()
         self.define_trip_distance
+        self.km_reserve = self.max_run - self.trip_distance
         #self.tank_refill()
         # self.tachograph_check()
         #self.ride()
@@ -44,6 +46,12 @@ class Cars(Engine):
     def __str__(self):
         return ('Distance passed {}, car cost {}, money for fuel {}, km in reserve {}, engine type is {}'.format(
         self.tachograph, self.car_cost, int(self.money_for_fuel), self.max_run - self.tachograph,self.engine_type))
+
+    def __repr__(self):
+        return ('km in reserve {}, cost {}'.format(str(self.km_reserve),self.car_cost))
+
+    def __add__(self, other):
+        return self.car_cost + other
 
 
     # def tank_refill(self):
@@ -71,7 +79,6 @@ class Cars(Engine):
         decrease_count = 0
         consume = self.consumption * 0.01
         refill = self.tank
-        print self.trip_distance
         while self.trip_distance != 0:
             self.trip_distance -= 1
             self.tachograph += 1
@@ -83,6 +90,12 @@ class Cars(Engine):
                 self.consumption += consume
                 if self.tachograph == self.max_run:
                     print ('Car broke, stop moving')
+            if self.car_cost <= 40:
+                # raise ArithmeticError ('Car broke')
+                self.trip_distance = 0
+                self.km_reserve = 0
+                print ("Car can't move its broke")
+                return self.trip_distance, self.km_reserve
             if int(self.tank) == 0:
                 refilling_counter += 1
                 self.tank = refill
@@ -91,20 +104,25 @@ class Cars(Engine):
         print ('Comsumption increase, car cost decrease {} times'.format(decrease_count))
 
 
-
-
-
-
-
-
+zaz = Cars()
 car_pool = []
 gas_pool = []
 diesel_pool = []
-for x in range(0,20):
+for x in range(0,5):
     x = Cars()
     x.ride()
     car_pool.append(x)
 for car in car_pool:
     if car.engine_type == 'Gas':
         gas_pool.append(car)
-        print sorted(gas_pool)
+    else:
+        diesel_pool.append(car)
+
+#print filter(lambda  x: x.km_reserve < 0, gas_pool)
+print sorted(gas_pool, key=operator.attrgetter('km_reserve'))
+print sorted(diesel_pool, key=operator.attrgetter('car_cost'))
+print zaz + 100
+
+
+
+
