@@ -39,18 +39,18 @@ class Cars(Engine):
         if Cars.car_count % 5 == 0 :
             self.tank = 75
     @property
-    def define_trip_distance(self):
+    def define_trip_distance(self):                       # setting trip distance
         self.trip_distance = random.randint(29000, 186000)
         return self.trip_distance
 
-    def __str__(self):
+    def __str__(self):                                    # set what we see when print instance
         return ('Distance passed {}, car cost {}, money for fuel {}, km in reserve {}, engine type is {}'.format(
         self.tachograph, self.car_cost, int(self.money_for_fuel), self.max_run - self.tachograph,self.engine_type))
 
-    def __repr__(self):
+    def __repr__(self):                                   # setting representation of instance
         return ('km in reserve {}, cost {}'.format(str(self.km_reserve),self.car_cost))
 
-    def __add__(self, other):
+    def __add__(self, other):     # set car cost can add, also can write additional methods like radd iadd
         return self.car_cost + other
 
 
@@ -74,32 +74,31 @@ class Cars(Engine):
     #             print ('Car broke, stop moving')
     #     print ('Comsumption increase, car cost decrease {} times'.format(decrease_count))
 
-    def ride(self):
+    def ride(self):                      # set what happens when car moving
         refilling_counter = 0
         decrease_count = 0
         consume = self.consumption * 0.01
         refill = self.tank
-        while self.trip_distance != 0:
-            self.trip_distance -= 1
+        while self.trip_distance != 0:           # while moving subtract distance, fuel from tank, add km to tacho-
+            self.trip_distance -= 1              # graph
             self.tachograph += 1
-            #self.tachograph_check()
             self.tank -= self.consumption / 10
-            if int(self.tachograph) % 1000 == 0:
+            if int(self.tachograph) % 1000 == 0: # when 1000 kms passed car lost cost and consume increase
                 decrease_count += 1
                 self.car_cost -= self.cost_lost
                 self.consumption += consume
-                if self.tachograph == self.max_run:
+                if self.tachograph == self.max_run:   # if car passed max_run it can't move anymore
                     print ('Car broke, stop moving')
-            if self.car_cost <= 40:
+            if self.car_cost <= 40:                   # if car lost its cost to 0 it's dead
                 # raise ArithmeticError ('Car broke')
                 self.trip_distance = 0
                 self.km_reserve = 0
-                print ("Car can't move its broke")
+                print ("Car can't move, need to utilize")
                 return self.trip_distance, self.km_reserve
-            if int(self.tank) == 0:
+            if int(self.tank) == 0:                   # refilling tank when it's empty and add price for it
                 refilling_counter += 1
                 self.tank = refill
-            self.money_for_fuel += (self.consumption * self.fuel_price) / 10
+                self.money_for_fuel += (self.consumption * self.fuel_price) / 10
         print ('Refiling tank {} times'.format(refilling_counter))
         print ('Comsumption increase, car cost decrease {} times'.format(decrease_count))
 
