@@ -60,5 +60,5 @@ class Cars(object):
 car = Cars()
 
 print (car.ride(100))
-# car.tachograph, '-Tacho', car.fuel_consum,'-Consume', car.car_cost,'-Car price', car.money_for_fuel,'-Money for fuel')
+#car.tachograph, '-Tacho', car.fuel_consum,'-Consume', car.car_cost,'-Car price', car.money_for_fuel,'-Money for fuel')
 #print (car.tank, car2.tank, car3.tank, car4.tank, car5.tank, car6.tank, car7.tank, car8.tank, car9.tank,car10.max_run)
