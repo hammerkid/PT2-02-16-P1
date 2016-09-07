@@ -2,7 +2,7 @@ from pprint import pprint
 
 text = '''
 Beautiful is better than ugly.
-Explicit is better than implicit.
+Explicit is beter than implicit.
 Simple is better than complex.
 Complex is better than complicated.
 Flat is better than nested.
