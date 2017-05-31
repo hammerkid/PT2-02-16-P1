@@ -1,0 +1,50 @@
+import pprint
+import bs4 as bs
+import requests
+root_url = 'http://www.mas.gov.sg'
+monthly_url = '/Statistics/Monthly-Statistical-Bulletin.aspx'
+response = requests.get(root_url+monthly_url).text
+soup = bs.BeautifulSoup(response, 'html5lib')
+
+
+start_tree = soup.find('ul', id='pagecontent_0_ctl01_LHS_nav')
+root_id = 63
+source_name = 'Monthly Statistical Bulletin'
+treedict = {'id': root_id,
+            'description': source_name,
+            'children': [],
+            'is_dataset': False}
+
+def parse_node(tree, node_id):
+    descr = tree.text
+    node = {'id': root_id,
+            'children': [],
+            'is_dataset': False,
+            'description': descr}
+    kid_node = requests.get(root_url + tree.a['href']).text
+    kid_soup = bs.BeautifulSoup(kid_node, 'html5lib').find('div', id='content').find('ul', recursive=False)
+    a=0
+
+    try:
+        for x in kid_soup.find_all('li', recursive=False):
+            if 'API' in x.text:
+                a+=1
+                kid_node = {'id': node_id,
+                        'children': [],
+                        'dataset': "dataset_node",
+                        'is_dataset': True,
+                        'description': x.text}
+                node['children'].append(kid_node)
+        return node
+    except AttributeError:
+        print 'No tables with api'
+
+for node_raw in start_tree.ul:
+    x = parse_node(node_raw, root_id)
+    if not x or not x['children']:
+        pass
+    else:
+        treedict['children'].append(x)
+
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(treedict)
